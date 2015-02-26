@@ -78,7 +78,9 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-mongoose.connect('mongodb://admin:qwerty123@ds047930.mongolab.com:47930/ashield');
+mongoose.connect('mongodb://localhost/myapp');
+
+// mongoose.connect('mongodb://admin:qwerty123@ds047930.mongolab.com:47930/ashield');
 
 var db = mongoose.connection;
 db.on('error', function callback () {

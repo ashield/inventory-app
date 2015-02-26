@@ -1,11 +1,13 @@
 var mongoose = require('mongoose');
 var itemSchema = mongoose.Schema({
-	item: String
+	name: String,
+	description: String
 })
 
 var Item = mongoose.model('Item', itemSchema);
 
-var items = [];
+// var items = [];
+
 var _ = require('lodash');
 
 function findOne(req) {
@@ -13,7 +15,14 @@ function findOne(req) {
 }
 
 exports.list = function (req, res) {
-	res.render('index', {items: items});
+	// var items = findAll   work out later
+	// res.render('index', {items: items});
+
+    Item.find(function (err, items) {
+        if (err) return console.error(err);
+        // res.send(items);
+        res.render('index', {items: items});
+	})
 };
 
 exports.show = function (req, res) {
@@ -24,16 +33,31 @@ exports.new = function (req, res) {
     res.render('new');
 };
 
-exports.create = (function (req, res) {
-    var item = {
-        id: _.uniqueId(),
-        name: req.body.name,
-        description: req.body.description
-    };
+exports.create = function(req, res) {
+    console.log(req.param);
+    if (!req.param('item')) {
+        res.send('Item not valid');
+        res.statusCode = 400;
+    } else {
+        var item = new Item({ item: req.param('item')});
+        console.log(item);
+        item.save(function (err, item) {
+            if (err) return console.error(err);
+            res.send("adding " + item);
+        });
+    }
+};
+        // id: _.uniqueId(),
+        // name: req.param,
+        // description: req.body.description
+//     };
+// }
 
-    items.push(item);
-    res.redirect('/');
-});
+//     items.push(item);
+//     res.redirect('/');
+// });
+
+
 
 exports.edit = function (req, res) {
 	res.render('edit', findOne(req));
