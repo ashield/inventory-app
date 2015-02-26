@@ -4,6 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var inventory = require('./inventory');
+var mongoose = require('mongoose');
 
 var app = express();
 var expressHbs = require('express-handlebars');
@@ -22,14 +24,30 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', function (req, res) {
-    res.render('index', {title:'Express'});
-});
+app.route('/')
+    // list all our inventory items
+    .get(inventory.list)
+    //create new inventory items
+    .post(inventory.create);
+
+    app.get('/new', inventory.new);
+
+app.route('/:id')
+// view a single item
+    .get(inventory.show)
+// update a single item
+    .post(inventory.update)
+// delete a single item
+    .delete(inventory.delete);
+
+app.route('/:id/edit')
+// open edit form
+    .get(inventory.edit);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
-    err.status = 404;
+    err.status = 404; 
     next(err);
 });
 
@@ -59,3 +77,13 @@ app.use(function(err, req, res, next) {
 
 
 module.exports = app;
+
+mongoose.connect('mongodb://admin:qwerty123@ds047930.mongolab.com:47930/ashield');
+
+var db = mongoose.connection;
+db.on('error', function callback () {
+    console.error('connection error');
+});
+db.once('open', function callback () {
+    console.error('connection success');
+});
