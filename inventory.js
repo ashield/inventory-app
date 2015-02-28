@@ -15,9 +15,6 @@ function findOne(req) {
 }
 
 exports.list = function (req, res) {
-	// var items = findAll   work out later
-	// res.render('index', {items: items});
-
     Item.find(function (err, items) {
         if (err) return console.error(err);
         // res.send(items);
@@ -34,30 +31,17 @@ exports.new = function (req, res) {
 };
 
 exports.create = function(req, res) {
-    console.log(req.param);
-    if (!req.param('item')) {
-        res.send('Item not valid');
-        res.statusCode = 400;
-    } else {
-        var item = new Item({ item: req.param('item')});
-        console.log(item);
-        item.save(function (err, item) {
-            if (err) return console.error(err);
-            res.send("adding " + item);
-        });
-    }
+    var item = new Item({
+        name: req.body.name,
+        description: req.body.description                                                   
+     });
+		item.save(function (err, item) {
+		// LOGGING
+		// if (err) return console.error(err);
+		// res.send("adding " + item);
+		res.redirect('/');
+	});
 };
-        // id: _.uniqueId(),
-        // name: req.param,
-        // description: req.body.description
-//     };
-// }
-
-//     items.push(item);
-//     res.redirect('/');
-// });
-
-
 
 exports.edit = function (req, res) {
 	res.render('edit', findOne(req));
