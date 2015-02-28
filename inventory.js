@@ -11,10 +11,17 @@ var Item = mongoose.model('Item', itemSchema);
 var _ = require('lodash');
 
 function findOne(req) {
-	return _.find(items, {id: req.params.id});
+	return _.find(Item, {id: req.params.id});
 }
 
-exports.list = function (req, res) {
+// exports.retrieveOne = function(req, res) {
+//     Item.find({'_id':mongoose.Types.ObjectId(req.param('id'))}, function (err, item) {
+//         if (err) return console.error(err);
+//         res.send(item);
+//     });
+// }
+
+exports.retrieveAll = function (req, res) {
     Item.find(function (err, items) {
         if (err) return console.error(err);
         // res.send(items);
@@ -46,6 +53,7 @@ exports.create = function(req, res) {
 exports.edit = function (req, res) {
 	res.render('edit', findOne(req));
 };
+
 
 exports.update = function (req, res) {
 	var id = req.params.id;

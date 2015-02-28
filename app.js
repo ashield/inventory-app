@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.route('/')
     // list all our inventory items
-    .get(inventory.list)
+    .get(inventory.retrieveAll)
     //create new inventory items
     .post(inventory.create);
 
@@ -78,9 +78,9 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-// mongoose.connect('mongodb://localhost/myapp');
+mongoose.connect('mongodb://localhost/myapp');
 
-mongoose.connect('mongodb://admin:qwerty123@ds047930.mongolab.com:47930/ashield');
+// mongoose.connect('mongodb://admin:qwerty123@ds047930.mongolab.com:47930/ashield');
 
 var db = mongoose.connection;
 db.on('error', function callback () {
