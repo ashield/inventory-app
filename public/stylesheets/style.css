@@ -10,18 +10,10 @@ html {
 
 body {
   padding: 30px;
-  height: 100%;
   font-family: Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   color: #333;
-  background: #35335d; /* Old browsers */
-    background: -moz-linear-gradient(top,  #35335d 0%, #39619e 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#35335d), color-stop(100%,#39619e)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #35335d 0%,#39619e 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #35335d 0%,#39619e 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #35335d 0%,#39619e 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  #35335d 0%,#39619e 100%); /* W3C */
-    overflow: hidden;
+  background: #35335d;
 }
 
 .container {
@@ -68,11 +60,11 @@ h1 {
 .content {
     position: absolute;
     top: 145px;
-    bottom: 0;
     width: 620px;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
     background: #f3f3f3;
+    margin-bottom: 30px;
 }
 
 .button {

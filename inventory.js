@@ -1,36 +1,23 @@
 var mongoose = require('mongoose');
 var itemSchema = mongoose.Schema({
-	name: String,
-	description: String
+    name: String,
+    description: String
 })
 
 var Item = mongoose.model('Item', itemSchema);
 
-// var items = [];
-
-var _ = require('lodash');
-
-function findOne(req) {
-	return _.find(Item, {id: req.params.id});
-}
-
-// exports.retrieveOne = function(req, res) {
-//     Item.find({'_id':mongoose.Types.ObjectId(req.param('id'))}, function (err, item) {
-//         if (err) return console.error(err);
-//         res.send(item);
-//     });
-// }
-
 exports.retrieveAll = function (req, res) {
     Item.find(function (err, items) {
         if (err) return console.error(err);
-        // res.send(items);
         res.render('index', {items: items});
-	})
+    })
 };
 
 exports.show = function (req, res) {
-    res.render('show', findOne(req));
+    Item.findOne({'_id':mongoose.Types.ObjectId(req.param('id'))}, function (err, item) {
+    	if (err) return console.error(err); // change to 404 page
+        res.render('show', item)
+    });
 };
 
 exports.new = function (req, res) {
@@ -40,35 +27,37 @@ exports.new = function (req, res) {
 exports.create = function(req, res) {
     var item = new Item({
         name: req.body.name,
-        description: req.body.description                                                   
+        description: req.body.description
      });
-		item.save(function (err, item) {
-		// LOGGING
-		// if (err) return console.error(err);
-		// res.send("adding " + item);
-		res.redirect('/');
-	});
+        item.save(function (err, item) {
+        if (err) return console.error(err);
+        res.redirect('/');
+    });
 };
 
 exports.edit = function (req, res) {
-	res.render('edit', findOne(req));
+    Item.findOne({'_id':mongoose.Types.ObjectId(req.param('id'))}, function (err, item) {
+        if (err) return console.error(err); // change to 404 page
+        res.render('edit', item)
+    });
 };
-
 
 exports.update = function (req, res) {
-	var id = req.params.id;
-	var index = _.findIndex (items, {id: id});
-	var item = {
-		id: id,
-		name: req.body.name,
-		description: req.body.description
-	};
-
-	items[index] = item;
-	res.redirect('/' + id);
+    Item.findOne({'_id':mongoose.Types.ObjectId(req.param('id'))}, function (err, item) {
+        if (err) return console.error(err); // change to 404 page
+        item['name'] = req.body.name;
+        item['description'] = req.body.description;
+        item.save()
+        res.render('show', item)
+    });
 }
 
+
 exports.delete = function (req, res) {
-    _.remove(items, {id: req.params.id});
-    res.json({success: true});
-};
+    Item.remove({'_id':mongoose.Types.ObjectId(req.param('id'))}, function (err, item) {
+	    if (err) return console.error(err); // change to 404 page
+	    res.json({success: true});
+	});
+}
+
+
